@@ -1,0 +1,49 @@
+library(dplyr)
+phone_data <- read.csv("D:/NMIT/AEC R Programming/phone_data.csv")
+phone_data
+vodafone_users <- phone_data %>%
+ filter(network == "Vodafone") %>%
+ nrow()
+vodafone_users
+number_of_calls <- sum(phone_data$duration > 15)
+number_of_calls
+top5_duration_calls <- phone_data %>%
+ filter(item == "call") %>%
+ arrange(desc(duration)) %>%
+ distinct(month, .keep_all = TRUE) %>%
+ head(5)
+# Print the top 5 months with their corresponding durations
+print(top5_duration_calls)
+avg_duration_by_network_type <- phone_data %>%
+ group_by(network_type) %>%
+ summarise(avg_duration = mean(duration))
+avg_duration_by_network_type
+avg_duration_by_item_network <- phone_data %>%
+ group_by(item, network) %>%
+ summarise(avg_duration = mean(duration))
+avg_duration_by_item_network
+count_by_item_network <- phone_data %>%
+ group_by(item, network) %>%
+ summarise(count = n())
+count_by_item_network
+month_with_max_calls <- phone_data %>%
+ filter(item == "call") %>%
+ group_by(month) %>%
+ summarise(count = n()) %>%
+ arrange(desc(count)) %>%
+ head(1)
+month_with_max_calls
+total_messages_world_users <- phone_data %>%
+ filter(network == "world" & item == "sms") %>%
+ nrow()
+total_messages_world_users
+proportion_meteor_users <- phone_data %>%
+ filter(network == "Meteor") %>%
+ nrow() / nrow(phone_data)
+proportion_meteor_users
+month_with_highest_duration <- phone_data %>%
+ group_by(month) %>%
+ summarise(total_duration = sum(duration)) %>%
+ arrange(desc(total_duration)) %>%
+ head(1)
+month_with_highest_duration
